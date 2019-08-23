@@ -1,598 +1,118 @@
-Deployment:
-  type: object
-  required:
-    - name
+Order:
+  type: "object"
   properties:
     id:
-      type: string
-      description: Identifier of the deployment
-    provider_assigned_id:
-      type: string
-      description: Identifier assigned by the provider
-    name:
-      type: string
-      description: Name of the deployment
-      maxLength: 127
-    org_id:
-      type: string
-      description: Identifier of the deployment organization
-    type:
-      $ref: '#/DeploymentType'
-    state:
-      $ref: '#/State'
-    location:
-      $ref: '#/Location'
-    version:
-      $ref: '#/DeploymentVersion'
-    creator:
-      $ref: '#/Creator'
-    tags:
-      type: object
-      description: Customer defined resource tags
-      additionalProperties:
-        type: string
-    properties:
-      type: object
-      description: Internal resource properties
-      additionalProperties:
-        type: string
-    traits:
-      type: object
-      description: Extended resource traits
-      additionalProperties:
-        $ref: '#/Trait'
-Cluster:
-  type: object
-  required:
-    - name
-    - deployment_id
-  properties:
-    id:
-      type: string
-      description: Identifier of the cluster
-    provider_assigned_id:
-      type: string
-      description: Identifier assigned by the provider
-    name:
-      type: string
-      description: Name of the cluster
-    deployment_id:
-      type: string
-      description: Identifier of the parent deployment
-    org_id:
-      type: string
-      description: Identifier of the organization
-    state:
-      $ref: '#/State'
-    properties:
-      type: object
-      description: Internal resource properties
-      additionalProperties:
-        type: string
-    traits:
-      type: object
-      description: Extended resource traits
-      additionalProperties:
-        $ref: '#/Trait'
-Host:
-  type: object
-  required:
-    - name
-    - deployment_id
-    - cluster_id
-  properties:
-    id:
-      type: string
-      description: Identifier of the deployment host
-    provider_assigned_id:
-      type: string
-      description: Identifier assigned by the provider
-    name:
-      type: string
-      description: Name of host
-    deployment_id:
-      type: string
-      description: Identifier of the parent deployment
-    cluster_id:
-      type: string
-      description: Identifier of the parent cluster
-    org_id:
-      type: string
-      description: Identifier of the organization
-    state:
-      $ref: '#/State'
-    capacity:
-      $ref: '#/Capacity'
-    properties:
-      type: object
-      description: Internal resource properties
-      additionalProperties:
-        type: string
-    traits:
-      type: object
-      description: Extended resource traits
-      additionalProperties:
-        $ref: '#/Trait'
-DeploymentType:
-  type: object
-  required:
-    - name
-  properties:
-    name:
-      type: string
-      description: Name of the provider name
-    code:
-      type: string
-      description: Unique code identifying provider name
-    deployment_type:
-      type: string
-      description: Provider specific deployment name
-DeploymentVersion:
-  type: object
-  required:
-    - name
-  properties:
-    name:
-      type: string
-      description: Name of the SDDC version bundle
-    code:
-      type: string
-      description: Unique code identifying SDDC version
-Location:
-  type: object
-  required:
-    - name
-  properties:
-    name:
-      type: string
-      description: Name of the location
-    code:
-      type: string
-      description: Unique code identifying location
-    address:
-      type: object
-      description: Provider specific deployment name
-      additionalProperties:
-        type: string
-State:
-  type: object
-  required:
-    - name
-  properties:
-    name:
-      type: string
-      description: Name of the state name
-Creator:
-  type: object
-  properties:
-    user_name:
-      type: string
-      description: Name of user that created the deployment
-    user_id:
-      type: string
-      description: Identifier of the user that created the deployment
-    timestamp:
-      type: string
-      description: Timestamp of deployment creation
-Capacity:
-  type: object
-  properties:
-    cpu_mhz:
-      type: integer
-      format: int32
-      description: Configured cpu capacity for the host (mhz)
-    memory_bytes:
-      type: integer
-      format: int64
-      description: Configured memory capacity for the host (bytes)
-    storage_bytes:
-      type: integer
-      format: int64
-      description: Configured storage capacity for the host (bytes)
-ResourceUsage:
-  type: object
-  properties:
-    cpu_mhz:
-      type: integer
-      format: int64
-      description: Snapshot of the total cpu usage (mhz)
-    memory_bytes:
-      type: integer
-      format: int64
-      description: Snapshot of the total memory usage (bytes)
-    storage_bytes:
-      type: integer
-      format: int64
-      description: Snapshot of the total storage usage (bytes)
-
-Trait:
-  type: object
-  discriminator: name
-  required:
-    - name
-  properties:
-    id:
-      type: string
-      description: Identifier of the trait
-    resource_id:
-      type: string
-      description: Identifier of the owning resource
-    name:
-      type: string
-      description: Name of trait
-DefaultTrait:
-  type: object
-  x-vmw-vapi-discriminated-by: "DefaultTrait"
-  allOf:
-    - $ref: '#/Trait'
-    - properties:
-        properties:
-          type: object
-          description: Internal trait properties
-          additionalProperties:
-            type: string
-AggregateCapacityTrait:
-  type: object
-  x-vmw-vapi-discriminated-by: "AggregateCapacityTrait"
-  allOf:
-    - $ref: '#/Trait'
-    - properties:
-        cluster_count:
-          type: integer
-          format: int32
-          description: Total number of clusters
-        host_count:
-          type: integer
-          format: int32
-          description: Total number of hosts
-        total_capacity:
-          $ref: '#/Capacity'
-HostVcenterTrait:
-  type: object
-  x-vmw-vapi-discriminated-by: "HostVcenterTrait"
-  allOf:
-    - $ref: '#/Trait'
-    - properties:
-        moid:
-          type: string
-          description: vCenter MOID
-        vc_id:
-          type: string
-          description: vCenter ID
-        core_count:
-          type: integer
-          format: int32
-          description: Total number of cores
-        capacity:
-          $ref: '#/Capacity'
-HostVcenterExtendedTrait:
-  type: object
-  x-vmw-vapi-discriminated-by: "HostVcenterExtendedTrait"
-  allOf:
-    - $ref: '#/Trait'
-    - properties:
-        last_updated:
-          type: string
-          description: Date/time of last update
-        vm_count:
-          type: integer
-          format: int32
-          description: Total number of VMs
-        resource_usage:
-          $ref: '#/ResourceUsage'
-HostVmcAwsTrait:
-  type: object
-  x-vmw-vapi-discriminated-by: "HostVmcAwsTrait"
-  allOf:
-    - $ref: '#/Trait'
-    - properties:
-        config:
-          type: object
-          properties:
-            core_count:
-              type: integer
-              format: int32
-              description: Total number of cores
-            capacity:
-              $ref: '#/Capacity'
-ClusterVcenterTrait:
-  type: object
-  x-vmw-vapi-discriminated-by: "ClusterVcenterTrait"
-  allOf:
-    - $ref: '#/Trait'
-    - properties:
-        moid:
-          type: string
-          description: vCenter MOID
-        vc_id:
-          type: string
-          description: vCenter ID
-        host_count:
-          type: integer
-          format: int32
-          description: Total number of hosts
-        core_count:
-          type: integer
-          format: int32
-          description: Total number of cores
-        capacity:
-          $ref: '#/Capacity'
-ClusterVcenterExtendedTrait:
-  type: object
-  x-vmw-vapi-discriminated-by: "ClusterVcenterExtendedTrait"
-  allOf:
-    - $ref: '#/Trait'
-    - properties:
-        last_updated:
-          type: string
-          description: Date/time of last update
-        vm_count:
-          type: integer
-          format: int32
-          description: Total number of VMs
-        resource_usage:
-          $ref: '#/ResourceUsage'
-ClusterVmcAwsTrait:
-  type: object
-  x-vmw-vapi-discriminated-by: "ClusterVmcAwsTrait"
-  allOf:
-    - $ref: '#/Trait'
-    - properties:
-        config:
-          type: object
-          properties:
-            host_count:
-              type: integer
-              format: int32
-              description: Total number of hosts
-            core_count:
-              type: integer
-              format: int32
-              description: Total number of cores
-            capacity:
-              $ref: '#/Capacity'
-DeploymentVcenterTrait:
-  type: object
-  x-vmw-vapi-discriminated-by: "DeploymentVcenterTrait"
-  allOf:
-    - $ref: '#/Trait'
-    - properties:
-        vc_url:
-          type: string
-          description: URL of the VC
-        cluster_count:
-          type: integer
-          format: int32
-          description: Total number of clusters
-        host_count:
-          type: integer
-          format: int32
-          description: Total number of hosts
-        core_count:
-          type: integer
-          format: int32
-          description: Total number of cores
-        capacity:
-          $ref: '#/Capacity'
-DeploymentVcenterExtendedTrait:
-  type: object
-  x-vmw-vapi-discriminated-by: "DeploymentVcenterExtendedTrait"
-  allOf:
-    - $ref: '#/Trait'
-    - properties:
-        last_updated:
-          type: string
-          description: Date/time of last update
-        vm_count:
-          type: integer
-          format: int32
-          description: Total number of VMs
-        resource_usage:
-          $ref: '#/ResourceUsage'
-DeploymentVmcAwsTrait:
-  type: object
-  x-vmw-vapi-discriminated-by: "DeploymentVmcAwsTrait"
-  allOf:
-    - $ref: '#/Trait'
-    - properties:
-        config:
-          type: object
-          properties:
-            cluster_count:
-              type: integer
-              format: int32
-              description: Total number of clusters
-            host_count:
-              type: integer
-              format: int32
-              description: Total number of hosts
-            core_count:
-              type: integer
-              format: int32
-              description: Total number of cores
-            capacity:
-              $ref: '#/Capacity'
-DeploymentVmcAwsCredentialsTrait:
-  type: object
-  x-vmw-vapi-discriminated-by: "DeploymentVmcAwsCredsTrait"
-  allOf:
-    - $ref: '#/Trait'
-    - properties:
-        vc_admin:
-          type: object
-          properties:
-            admin_username:
-              type: string
-            admin_password:
-              type: string
-        vc_cloud:
-          type: object
-          properties:
-            cloud_username:
-              type: string
-            cloud_password:
-              type: string
-            cloud_user_group:
-              type: string
-        vc_ssh_credential:
-          type: object
-          properties:
-            username:
-              type: string
-            password:
-              type: string
-        sddc_manager_credentials:
-          type: object
-          properties:
-            root_credential:
-              type: object
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
-            second_user_credential:
-              type: object
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
-            rest_api_credential:
-              type: object
-              properties:
-                username:
-                  type: string
-                password:
-                  type: string
-
-Operation:
-  type: object
-  required:
-    - type
-    - resource_id
-    - resource_type
-  properties:
-    id:
-      type: string
-      description: Identifier of the operation
-    type:
-      type: string
-      description: Type of the operation
-    resource_id:
-      type: string
-      description: Identifier of the resource being operated on
-    resource_type:
-      type: string
-      description: Type of the resource being operated on
-    org_id:
-      type: string
-      description: Identifier of operation organization
-    state:
-      $ref: '#/State'
-    config:
-      $ref: '#/Config'
-
-Config:
-  type: object
-  discriminator: type
-  required:
-    - type
-  properties:
-    type:
-      type: string
-      description: Type of config
-    operation_id:
-      type: string
-      description: ID of the owning operation
-DefaultConfig:
-  type: object
-  x-vmw-vapi-discriminated-by: "DefaultConfig"
-  allOf:
-    - $ref: '#/Config'
-    - properties:
-        properties:
-          type: object
-          description: Internal config properties
-          additionalProperties:
-            type: string
-DeployVmcAwsSddcConfig:
-  type: object
-  x-vmw-vapi-discriminated-by: "DeployVmcAwsSddcConfig"
-  allOf:
-    - $ref: '#/Config'
-    - properties:
-        name:
-          type: string
-          description: Name of the SDDC
-        location:
-          $ref: '#/Location'
-        deployment_type:
-          type: string
-          description: Type of SDDC deployment
-          enum:
-            - SingleAZ
-            - MultiAZ
-        sddc_type:
-          type: string
-          description: Type of SDDC
-          enum:
-            - OneNode
-            - Default
-        provider_type:
-          type: string
-          description: Type of provider
-          enum:
-            - AWS
-            - ZEROCLOUD
-        host_type:
-          type: string
-          description: Type of host
-          enum:
-            - L3
-            - R5
-        storage_capacity_per_host_bytes:
-          type: integer
-          format: int64
-          description: Storage capacity per host (bytes)
-        host_count:
-          type: integer
-          format: int32
-          description: Initial number of hosts in deployment
-        account_link_config:
-          type: object
-          properties:
-            aws_account_id:
-              type: string
-            subnet_id:
-              type: string
-        network_config:
-          type: object
-          properties:
-            cidr_block:
-              type: string
-
-ErrorResponse:
-  type: object
-  required:
-    - timestamp
-    - status
-    - error
-    - message
-    - path
-  properties:
-    timestamp:
-      type: string
-      description: Time error was created
+      type: "integer"
+      format: "int64"
+    petId:
+      type: "integer"
+      format: "int64"
+    quantity:
+      type: "integer"
+      format: "int32"
+    shipDate:
+      type: "string"
+      format: "date-time"
     status:
-      type: integer
-      description: HTTP status code
-    error:
-      type: string
-      description: Translation of status
+      type: "string"
+      description: "Order Status"
+      enum:
+      - "placed"
+      - "approved"
+      - "delivered"
+    complete:
+      type: "boolean"
+      default: false
+  xml:
+    name: "Order"
+User:
+  type: "object"
+  properties:
+    id:
+      type: "integer"
+      format: "int64"
+    username:
+      type: "string"
+    firstName:
+      type: "string"
+    lastName:
+      type: "string"
+    email:
+      type: "string"
+    password:
+      type: "string"
+    phone:
+      type: "string"
+    userStatus:
+      type: "integer"
+      format: "int32"
+      description: "User Status"
+  xml:
+    name: "User"
+Category:
+  type: "object"
+  properties:
+    id:
+      type: "integer"
+      format: "int64"
+    name:
+      type: "string"
+  xml:
+    name: "Category"
+Tag:
+  type: "object"
+  properties:
+    id:
+      type: "integer"
+      format: "int64"
+    name:
+      type: "string"
+  xml:
+    name: "Tag"
+Pet:
+  type: "object"
+  required:
+  - "name"
+  - "photoUrls"
+  properties:
+    id:
+      type: "integer"
+      format: "int64"
+    category:
+      $ref: "#/definitions/Category"
+    name:
+      type: "string"
+      example: "doggie"
+    photoUrls:
+      type: "array"
+      xml:
+        name: "photoUrl"
+        wrapped: true
+      items:
+        type: "string"
+    tags:
+      type: "array"
+      xml:
+        name: "tag"
+        wrapped: true
+      items:
+        $ref: "#/definitions/Tag"
+    status:
+      type: "string"
+      description: "pet status in the store"
+      enum:
+      - "available"
+      - "pending"
+      - "sold"
+  xml:
+    name: "Pet"
+ApiResponse:
+  type: "object"
+  properties:
+    code:
+      type: "integer"
+      format: "int32"
+    type:
+      type: "string"
     message:
-      type: string
-      description: Error message
-    path:
-      type: string
-      description: Originating request URI
+      type: "string"
