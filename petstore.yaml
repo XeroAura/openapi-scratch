@@ -588,10 +588,6 @@ definitions:
     $ref: 'https://raw.githubusercontent.com/AvoH/openapi-scratch/master/api-defs.yaml#/Order'
   User:
     $ref: 'https://raw.githubusercontent.com/AvoH/openapi-scratch/master/api-defs.yaml#/User'
-  Category:
-    $ref: 'https://raw.githubusercontent.com/AvoH/openapi-scratch/master/api-defs.yaml#/Category'
-  Tag:
-    $ref: 'https://raw.githubusercontent.com/AvoH/openapi-scratch/master/api-defs.yaml#/Tag'
   Pet:
     $ref: 'https://raw.githubusercontent.com/AvoH/openapi-scratch/master/api-defs.yaml#/Pet'
   ApiResponse:
