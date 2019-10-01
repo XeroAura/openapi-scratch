@@ -1,0 +1,62 @@
+{
+  "rules": {
+    "query-param-lower-snake-case": {
+      "description": "Check for lower snake case for names of query parameters.",
+      "recommended": true,
+      "resolved": true,
+      "type": "style",
+      "severity": 0,
+      "given": "$.paths.*.*.parameters[*]",
+      "then": [
+        {
+          "function": "QueryParamLowerSnakeCase"
+        }
+      ],
+      "tags": ["vmware-standards"]
+    },
+    "header-param-lower-kebab-case": {
+      "description": "Check header parameter names are lower kebab case.",
+      "recommended": true,
+      "resolved": true,
+      "type": "style",
+      "severity": 1,
+      "given": "$.paths.*.*.parameters[*]",
+      "then": [
+        {
+          "function": "HeaderParamLowerKebabCase"
+        }
+      ],
+      "tags": ["vmware-standards"]
+    },
+    "uri-kebab-case": {
+      "description": "Check path URIs are kebab-case.",
+      "recommended": true,
+      "resolved": false,
+      "type": "style",
+      "severity": 0,
+      "given": "$.paths[*]",
+      "then": [
+        {
+          "field": "@key",
+          "function": "UriKebabCase"
+        }
+      ],
+      "tags": ["vmware-standards"]
+    },
+    "uri-bad-suffix": {
+      "description": "Check path URIs do not contain certain suffixes like -service or -resource.",
+      "recommended": true,
+      "resolved": false,
+      "type": "style",
+      "severity": 0,
+      "given": "$.paths[*]",
+      "then": [
+        {
+          "field": "@key",
+          "function": "UriBadSuffix"
+        }
+      ],
+      "tags": ["vmware-standards"]
+    }
+  }
+}
