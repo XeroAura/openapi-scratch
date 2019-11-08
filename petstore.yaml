@@ -585,13 +585,13 @@ securityDefinitions:
     in: "header"
 definitions:
   Order:
-    $ref: 'https://raw.githubusercontent.com/AvoH/openapi-scratch/master/api-defs.yaml#/Order'
+    $ref: 'https://raw.githubusercontent.com/XeroAura/openapi-scratch/master/api-defs.yaml#/Order'
   User:
-    $ref: 'https://raw.githubusercontent.com/AvoH/openapi-scratch/master/api-defs.yaml#/User'
+    $ref: 'https://raw.githubusercontent.com/XeroAura/openapi-scratch/master/api-defs.yaml#/User'
   Pet:
-    $ref: 'https://raw.githubusercontent.com/AvoH/openapi-scratch/master/api-defs.yaml#/Pet'
+    $ref: 'https://raw.githubusercontent.com/XeroAura/openapi-scratch/master/api-defs.yaml#/Pet'
   ApiResponse:
-    $ref: 'https://raw.githubusercontent.com/AvoH/openapi-scratch/master/api-defs.yaml#/ApiResponse'
+    $ref: 'https://raw.githubusercontent.com/XeroAura/openapi-scratch/master/api-defs.yaml#/ApiResponse'
 externalDocs:
   description: "Find out more about Swagger"
   url: "http://swagger.io"
